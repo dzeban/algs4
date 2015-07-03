@@ -1,3 +1,5 @@
+import QuickUnionUF;
+
 public class Percolation {
     // Grid size
     private int N;
