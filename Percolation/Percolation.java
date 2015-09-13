@@ -45,7 +45,6 @@ public class Percolation {
 			if (site.i == 0 || site.i == (N + 1))
 				open(site);
 		}
-		System.out.println("------------------------");
 	}
 
     // Get site number in array as n = i*N + (j -1) because columns are 1 based
@@ -73,7 +72,6 @@ public class Percolation {
         site.open();
 
         // Connect to neighbors
-		System.out.printf("%d %d\n", i, j);
         site.connectTo(getSite(i-1, j), unionFind);
         site.connectTo(getSite(i+1, j), unionFind);
         site.connectTo(getSite(i, j-1), unionFind);
@@ -163,8 +161,6 @@ public class Percolation {
             this.j = j;
             this.number = n;
             this.isOpen = false;
-
-            System.out.printf("New site(%d, %d, %d)\n", i, j , n);
         }
 
         public int     getNumber() { return number; }
