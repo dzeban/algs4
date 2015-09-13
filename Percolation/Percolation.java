@@ -99,7 +99,7 @@ public class Percolation {
         {
             Site site = grid[n];
 
-            if (site.i == 0 || site.i == (N + 1))
+            if (site.getRow() == 0 || site.getRow() == (N + 1))
                 open(site);
         }
     }
@@ -143,7 +143,7 @@ public class Percolation {
     /**
      * Open a site by given reference
      */
-    private void open(Site site) { open(site.i, site.j); }
+    private void open(Site site) { open(site.getRow(), site.getCol()); }
 
     /**
      * Check whether is site pointed by given row and column is open
@@ -213,7 +213,7 @@ public class Percolation {
     private class Site
     {
         /** Site coordinates on a grid */
-        public int i, j; 
+        private int i, j;
 
         /** Site number in a grid array */
         private int number; 
@@ -229,6 +229,10 @@ public class Percolation {
             this.number = n;
             this.isOpen = false;
         }
+
+        /** Getters for coordinates */
+        public int getRow() { return i; }
+        public int getCol() { return j; }
 
         /** Get site number in a grid array */
         public int     getNumber() { return number; }
