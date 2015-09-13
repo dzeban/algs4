@@ -18,7 +18,6 @@
  *----------------------------------------------------------------*/
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 public class PercolationStats {
@@ -42,7 +41,7 @@ public class PercolationStats {
     }
 
 	/** Single experiment iteration */
-    private double doExperiment(int N)
+    private double doExperiment()
     {
         int i, j;
         int openSites = 0;
@@ -58,7 +57,7 @@ public class PercolationStats {
             openSites++;            
         } while(!pc.percolates());
 
-        return (double)openSites / (N * N);
+        return (double) openSites / (N * N);
     }
 
     /** Sample mean of percolation threshold */
@@ -78,7 +77,7 @@ public class PercolationStats {
     {
         if (args.length != 2) {
             StdOut.println("Requires 2 arguments <N> (grid size) and <T> (iterations)");
-            System.exit(1);
+            return;
         }
 
         // Read 2 arguments - N and T.

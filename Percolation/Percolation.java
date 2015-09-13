@@ -55,32 +55,32 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  */
 public class Percolation {
 
-	/** Grid size */
-	private int N;
+    /** Grid size */
+    private int N;
 
-	/** Grid itself */
-	private Site[] grid;
+    /** Grid itself */
+    private Site[] grid;
 
-	/** Union-find structure to account connected components */
+    /** Union-find structure to account connected components */
     private WeightedQuickUnionUF unionFind; // structure
 
-	/**
-	 * Create grid and initialize all sites.
-	 */
+    /**
+     * Create grid and initialize all sites.
+     */
     public Percolation(int N) 
-	{
-		int i, j;
-		this.N = N;
-		
-		grid = new Site[N * (N + 2)];
-		unionFind = new WeightedQuickUnionUF(N * (N + 2));
+    {
+        int i, j;
+        this.N = N;
+        
+        grid = new Site[N * (N + 2)];
+        unionFind = new WeightedQuickUnionUF(N * (N + 2));
 
-		// Create grid
-		i = 0;
-		j = 1;
-		for (int n = 0; n < N * (N + 2); n++)
-		{
-			grid[n] = new Site(i, j, n);
+        // Create grid
+        i = 0;
+        j = 1;
+        for (int n = 0; n < N * (N + 2); n++)
+        {
+            grid[n] = new Site(i, j, n);
 
             j = (j + 1) % (N + 1);
 
@@ -89,45 +89,45 @@ public class Percolation {
                 j = 1;
                 i++;
             }
-		}
+        }
 
-		// Initialize utility rows.
-		// We MUST do this after all sites are _created_ to avoid null pointers.
-		i = 0;
-		j = 1;
-		for (int n = 0; n < N * (N + 2); n++)
-		{
-			Site site = grid[n];
+        // Initialize utility rows.
+        // We MUST do this after all sites are _created_ to avoid null pointers.
+        i = 0;
+        j = 1;
+        for (int n = 0; n < N * (N + 2); n++)
+        {
+            Site site = grid[n];
 
-			if (site.i == 0 || site.i == (N + 1))
-				open(site);
-		}
-	}
+            if (site.i == 0 || site.i == (N + 1))
+                open(site);
+        }
+    }
 
-	/**
-	 * Get site number in array as n = i*N + (j -1) because columns are 1 based
-	 * and we must take into account utility rows.
-	 */
-    private int coordinates2number(int i, int j) { return i * N + (j - 1); }
+    /**
+     * Get site number in array as n = i*N + (j -1) because columns are 1 based
+     * and we must take into account utility rows.
+     */
+    private int xyToN(int i, int j) { return i * N + (j - 1); }
 
-	/**
-	 * Return site by given row and column
-	 */
+    /**
+     * Return site by given row and column
+     */
     private Site getSite(int i, int j)
     {
         if (i < 0 || i > N + 1 || j < 1 || j > N)
             return null;
 
-        int n = coordinates2number(i, j);
+        int n = xyToN(i, j);
         return grid[n];
     }
 
-	/**
-	 * Open a site by given row and column
-	 */
+    /**
+     * Open a site by given row and column
+     */
     public void open(int i , int j)
-	{
-        if (i < 0 || i > N + 1|| j < 1 || j > N )
+    {
+        if (i < 0 || i > N + 1 || j < 1 || j > N)
             throw new IllegalArgumentException("Site must be (1..N, 1..N)");
 
         Site site = getSite(i, j);
@@ -138,47 +138,38 @@ public class Percolation {
         site.connectTo(getSite(i+1, j), unionFind);
         site.connectTo(getSite(i, j-1), unionFind);
         site.connectTo(getSite(i, j+1), unionFind);
-	}
+    }
 
-	/**
-	 * Open a site by given reference
-	 */
-	public void open(Site site) { open(site.i, site.j); }
+    /**
+     * Open a site by given reference
+     */
+    private void open(Site site) { open(site.i, site.j); }
 
-	/**
-	 * Check whether is site pointed by given row and column is open
-	 */
+    /**
+     * Check whether is site pointed by given row and column is open
+     */
     public boolean isOpen(int i, int j)
-	{
+    {
         if (i < 1 || i > N)
             throw new IllegalArgumentException("Site must be (1..N, 1..N)");
 
         Site site = getSite(i, j);
         return site.getOpen();
-	}
+    }
 
-	/**
-	 * Check whether site is full, i.e. connected to the top row
-	 */
+    /**
+     * Check whether site is full, i.e. connected to the top row
+     */
     private boolean checkFull(Site site)
     {
         Site topSite;
-
-        for (int column = 1; column <= N; column++)
-        {
-			// Get sites from first utility row
-            topSite = getSite(0, column);
-            if (unionFind.connected(site.getNumber(), topSite.getNumber()))
-                return true;
-        }
-
-        return false;
+        return unionFind.connected(site.getNumber(), xyToN(0, 1));
     }
 
-	/**
-	 * Check whether site by given row and column is full, i.e. connected to the
-	 * top row
-	 */
+    /**
+     * Check whether site by given row and column is full, i.e. connected to the
+     * top row
+     */
     public boolean isFull(int i, int j)
     {
         if (i < 1 || i > N)
@@ -188,25 +179,18 @@ public class Percolation {
         return checkFull(site);
     }
 
-	/**
-	 * Check whether the whole system percolates
-	 */
+    /**
+     * Check whether the whole system percolates
+     */
     public boolean percolates()
     {
         Site bottomSite;
-        for (int column = 1; column <= N; column++)
-        {
-			// Get sites from the bottom utility row
-            bottomSite = getSite(N + 1, column);
-            if (checkFull(bottomSite))
-                return true;
-        }
-        return false;
+        return unionFind.connected(xyToN(0, 1), xyToN(N + 1, 1));
     }
 
-	/**
-	 * Test client
-	 */
+    /**
+     * Test client
+     */
     public static void main(String [] args)
     {
        Percolation pc = new Percolation(5);
@@ -223,9 +207,9 @@ public class Percolation {
        System.out.println(pc.percolates());
     }
 
-	/**
-	 * Inner class representing a Site
-	 */
+    /**
+     * Inner class representing a Site
+     */
     private class Site
     {
         /** Site coordinates on a grid */
@@ -234,10 +218,10 @@ public class Percolation {
         /** Site number in a grid array */
         private int number; 
 
-		/** Site state */
+        /** Site state */
         private boolean isOpen;
 
-		/** Public constructor */
+        /** Public constructor */
         Site(int i, int j, int n)
         {
             this.i = i;
@@ -246,16 +230,16 @@ public class Percolation {
             this.isOpen = false;
         }
 
-		/** Get site number in a grid array */
+        /** Get site number in a grid array */
         public int     getNumber() { return number; }
 
-		/** Get site state */
+        /** Get site state */
         public boolean getOpen() { return isOpen; }
 
-		/** Set site state to "open". Does NOT connect it to neighbors! */
+        /** Set site state to "open". Does NOT connect it to neighbors! */
         public void    open()  { isOpen = true; }
 
-		/** Connect this site to the neighbor site using Union-Find structure */
+        /** Connect this site to the neighbor site using Union-Find structure */
         public void connectTo(Site neighbor, WeightedQuickUnionUF uf)
         {
             if (neighbor == null)
