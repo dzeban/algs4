@@ -37,10 +37,10 @@ public class PercolationStats {
 
         results = new double[T];
         for (int i = 0; i < T; i++)
-            results[i] = doExperiment(N);
+            results[i] = doExperiment();
     }
 
-	/** Single experiment iteration */
+    /** Single experiment iteration */
     private double doExperiment()
     {
         int i, j;
