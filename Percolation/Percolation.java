@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 // !!!!!!!!!!!!!!!!!!!!!!!
 // i is a row
 // j is a column
