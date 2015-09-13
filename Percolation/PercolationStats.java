@@ -1,3 +1,21 @@
+/*----------------------------------------------------------------
+ *  Author:        Alex Dzyoba
+ *  Written:       2015-07-08
+ *  Last updated:  2015-09-13
+ *
+ *  Compilation:   javac-algs4 PercolationStats.java
+ *  Execution:     java-algs4 PercolationStats <N: grid size> <T: iterations>
+ *
+ *  Estimate percolation threshold using Monte Carlo simulation.
+ *
+ *  Percolation threshold is a value p* such when p < p* system almost never
+ *  percolates, and when p > p* it almost always percolates, where p is a
+ *  probability of site being open in a random grid NxN.
+ *
+ *  Simulation makes T iterations and computes mean, standart deviation and a
+ *  confidence interval.
+ *
+ *----------------------------------------------------------------*/
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
@@ -7,7 +25,7 @@ public class PercolationStats {
     private int N;
     private int T;
 
-    // Perform T independent experiments on an N-by-N grid
+    /** Perform T independent experiments on an N-by-N grid */
     public PercolationStats(int N, int T) 
     {
         if (N <= 0 || T <= 0)
@@ -21,6 +39,7 @@ public class PercolationStats {
             results[i] = doExperiment(N);
     }
 
+	/** Single experiment iteration */
     private double doExperiment(int N)
     {
         int i, j;
@@ -37,36 +56,22 @@ public class PercolationStats {
             openSites++;            
         } while(!pc.percolates());
 
-        //StdOut.printf("openSites %d, N2 %d, res %f\n",
-                //openSites, N*N, (double)openSites/(N*N));
         return (double)openSites / (N * N);
     }
 
-    // sample mean of percolation threshold
-    public double mean() 
-    {
-        return StdStats.mean(results);
-    }
+    /** Sample mean of percolation threshold */
+    public double mean() { return StdStats.mean(results); }
 
-    // sample standard deviation of percolation threshold
-    public double stddev() 
-    {
-        return StdStats.stddev(results);
-    }
+    /** Sample standard deviation of percolation threshold */
+    public double stddev() { return StdStats.stddev(results); }
 
-    // low  endpoint of 95% confidence interval
-    public double confidenceLo()
-    {
-        return mean() - 1.96 * stddev() / Math.sqrt(T);
-    }
+    /** Low  endpoint of 95% confidence interval */
+    public double confidenceLo() { return mean() - 1.96 * stddev() / Math.sqrt(T); }
 
-    // high endpoint of 95% confidence interval
-    public double confidenceHi()
-    {
-        return mean() + 1.96 * stddev() / Math.sqrt(T);
-    }
+    /** High endpoint of 95% confidence interval */
+    public double confidenceHi() { return mean() + 1.96 * stddev() / Math.sqrt(T); }
 
-    // test client
+    /** Test client */
     public static void main(String[] args)
     {
         if (args.length != 2) {
