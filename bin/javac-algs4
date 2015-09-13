@@ -11,6 +11,7 @@
 INSTALL=~/dev/algs4
 
 # Sets the path to the classpath libraries
-jars=(.:${INSTALL}/algs4.jar:${INSTALL}/stdlib.jar)
+#jars=(.:${INSTALL}/algs4.jar:${INSTALL}/stdlib.jar)
+jars=(.:${INSTALL}/algs4.jar)
 
 javac -cp "$jars" -g -encoding UTF-8 "$@"
