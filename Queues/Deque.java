@@ -34,13 +34,14 @@ public class Deque<Item> implements Iterable<Item>
     /** Inner class representing doubly-linked list node */
     private class Node
     {
-        Item item;
-        Node next, prev;
+        private Item item;
+        private Node next, prev;
 
         public Node(Item item)
         { 
             this.item = item; 
-            this.next = this.prev = null;
+            this.next = null;
+            this.prev = null;
         }
     }
 
@@ -53,7 +54,8 @@ public class Deque<Item> implements Iterable<Item>
     /** Construct an empty deque */
     public Deque()
     {
-        head = tail = null;
+        head = null;
+        tail = null;
         size = 0;
     }
 
@@ -204,7 +206,7 @@ public class Deque<Item> implements Iterable<Item>
             StdOut.println(n);
         }
 
-        if (deque.isEmpty() == false)
+        if (!deque.isEmpty())
             StdOut.printf("Size is %d\n", deque.size());
         else
             StdOut.println("Empty");
