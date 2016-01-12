@@ -156,5 +156,10 @@ public class Point implements Comparable<Point> {
         StdOut.println(aCmp.compare(d, c));
         StdOut.println(aCmp.compare(c, d));
         StdOut.println(aCmp.compare(c, b));
+
+        Point p = new Point(1, 1);
+        Point q = new Point(2, 2);
+        StdOut.println(p.slopeTo(q));
+        StdOut.println(q.slopeTo(p));
     }
 }
